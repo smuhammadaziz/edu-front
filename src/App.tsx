@@ -196,7 +196,7 @@ function App() {
           element={
             <>
               <PageTitle title="Educore Online Learning Platform" />
-              <ComeBackSoonPage />
+              <Home />
             </>
           }
         />
