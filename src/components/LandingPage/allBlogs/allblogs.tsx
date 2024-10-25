@@ -2,9 +2,6 @@ import { Typography, Card, CardBody } from '@material-tailwind/react';
 import useLang from '../../../hooks/useLang';
 import content from '../../../localization/content';
 import { NavLink } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import backurl from '../../../links';
-
 import moment from 'moment';
 
 interface ContentCardPropsType {
@@ -26,27 +23,30 @@ export function Blog() {
     return text;
   };
 
-  const [course, setCourses] = useState([]);
-
-  useEffect(() => {
-    async function fetchCourses() {
-      try {
-        const response = await fetch(`${backurl}api/get/all/blog`);
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-
-        const reversed = data;
-        // console.log(reversed);
-
-        setCourses(reversed.reverse());
-      } catch (error) {
-        console.log(error);
-      }
+  // Static blog data
+  const blogs = [
+    {
+      blog_id: '1',
+      img: 'https://blogassets.leverageedu.com/blog/wp-content/uploads/2020/05/23151218/BA-Courses.png', // Replace with actual image paths
+      title: 'Understanding React Hooks',
+      descr: 'React hooks allow you to use state and other React features without writing a class. This blog will explore the various hooks available in React.',
+      created_at: '2024-10-01T12:00:00Z',
+    },
+    {
+      blog_id: '2',
+      img: 'https://blogassets.leverageedu.com/blog/wp-content/uploads/2020/05/23151218/BA-Courses.png', // Replace with actual image paths
+      title: 'CSS Grid vs Flexbox',
+      descr: 'In this post, we will compare CSS Grid and Flexbox, two powerful layout systems in CSS, to help you choose the right one for your project.',
+      created_at: '2024-10-05T14:30:00Z',
+    },
+    {
+      blog_id: '3',
+      img: 'https://blogassets.leverageedu.com/blog/wp-content/uploads/2020/05/23151218/BA-Courses.png', // Replace with actual image paths
+      title: 'Getting Started with TypeScript',
+      descr: 'TypeScript is a superset of JavaScript that adds static types. Learn how to set up TypeScript in your projects and its key features.',
+      created_at: '2024-10-10T09:15:00Z',
     }
-    fetchCourses();
-  }, []);
+  ];
 
   function ContentCard({
     blog_id,
@@ -55,26 +55,7 @@ export function Blog() {
     img,
     created_at,
   }: ContentCardPropsType) {
-    const CourseDescription = ({ description }) => {
-      return <div dangerouslySetInnerHTML={{ __html: description }} />;
-    };
-
-    // const description = course && course ? course.descr : 'Lorem ipsum';
-    let textBlog: string = '';
-
-    course.map((e: any) => {
-      let descriptionBlog = e.descr;
-
-      textBlog = descriptionBlog;
-
-      // console.log(textBlog);
-
-      // console.log(descriptionBlog);
-    });
-
-    // console.log(textBlog);
-
-    const truncatedDesc = truncateText(textBlog, 12);
+    const truncatedDesc = truncateText(descr, 12);
 
     return (
       <Card
@@ -85,26 +66,22 @@ export function Blog() {
         key={blog_id}
       >
         <img
-          src={`${backurl}upload/${
-            course
-              ? img
-              : '128-1280406_view-user-icon-png-user-circle-icon-png.png'
-          }`}
+          src={img}
           alt="image"
-          className="absolute inset-0 h-full w-full object-cover  object-center"
+          className="absolute inset-0 h-full w-full object-cover object-center"
         />
         <div className="absolute inset-0 bg-black/80" />
         <CardBody className="relative flex flex-col justify-end">
           <Typography variant="h4" color="white">
             {title}
           </Typography>
-          {/* <Typography
+          <Typography
             variant="paragraph"
             color="white"
             className="my-2 font-normal"
           >
             {truncatedDesc}
-          </Typography> */}
+          </Typography>
           <div className="flex justify-between items-center mt-5">
             <NavLink
               to={`/all/blogs/${blog_id}`}
@@ -126,8 +103,6 @@ export function Blog() {
     );
   }
 
-  // console.log(textBlog);
-
   return (
     <div className="relative isolate overflow-hidden bg-white sm:py-0 lg:px-8 mt-20">
       <section className="container mx-auto px-8 py-10 lg:py-28 ">
@@ -140,7 +115,7 @@ export function Blog() {
         </Typography>
 
         <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-3">
-          {course.map(({ blog_id, img, title, descr, created_at }) => (
+          {blogs.map(({ blog_id, img, title, descr, created_at }) => (
             <ContentCard
               key={blog_id}
               blog_id={blog_id}

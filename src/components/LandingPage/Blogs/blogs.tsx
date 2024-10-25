@@ -2,11 +2,7 @@ import { Typography, Card, CardBody } from '@material-tailwind/react';
 import useLang from '../../../hooks/useLang';
 import content from '../../../localization/content';
 import { NavLink } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import backurl from '../../../links';
-
 import moment from 'moment';
-
 import { MdOutlineDateRange } from 'react-icons/md';
 import { CgDetailsMore } from 'react-icons/cg';
 
@@ -18,49 +14,40 @@ interface ContentCardPropsType {
   created_at: string;
 }
 
-const contents = [
-  {
-    img: 'https://www.material-tailwind.com/image/blog-11.jpeg',
-    title: 'Search and Discovery',
-    desc: 'Website visitors today demand a frictionless user expericence — especially when using search. Because of the hight standards we tend to offer.',
-    date: '15.05.2024',
-  },
-];
-
 export function Blog() {
   const [selectedLang] = useLang();
 
+  const blogs = [
+    {
+      blog_id: '1',
+      img: 'https://www.material-tailwind.com/image/blog-11.jpeg',
+      title: 'Search and Discovery',
+      descr:
+        'Website visitors today demand a frictionless user experience, especially when using search. Our high standards ensure quality.',
+      created_at: '2024-05-15',
+    },
+    {
+      blog_id: '2',
+      img: 'https://www.material-tailwind.com/image/blog-12.jpeg',
+      title: 'Optimizing User Flow',
+      descr:
+        'Enhance your website by focusing on user flow and seamless navigation for better engagement and retention.',
+      created_at: '2024-06-10',
+    },
+    {
+      blog_id: '3',
+      img: 'https://www.material-tailwind.com/image/blog-13.jpeg',
+      title: 'Design Trends in 2024',
+      descr:
+        'Stay ahead with the latest design trends for 2024 that prioritize user experience and visual appeal.',
+      created_at: '2024-07-20',
+    },
+  ];
+
   const truncateText = (text: string, numWords: number) => {
     const words = text.split(' ');
-    if (words.length > numWords) {
-      return words.slice(0, numWords).join(' ') + ' ...';
-    }
-    return text;
+    return words.length > numWords ? words.slice(0, numWords).join(' ') + ' ...' : text;
   };
-
-  const [course, setCourses] = useState([]);
-
-  useEffect(() => {
-    async function fetchCourses() {
-      try {
-        const response = await fetch(`${backurl}api/get/all/blog`);
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-
-        const reversed = data.reverse().slice(0, 3);
-        // console.log(reversed);
-
-        setCourses(reversed);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    fetchCourses();
-  }, []);
-
-  // console.log(course);
 
   function ContentCard({
     blog_id,
@@ -80,13 +67,9 @@ export function Blog() {
         key={blog_id}
       >
         <img
-          src={`${backurl}upload/${
-            course
-              ? img
-              : '128-1280406_view-user-icon-png-user-circle-icon-png.png'
-          }`}
-          alt="image"
-          className="absolute inset-0 h-full w-full object-cover  object-center"
+          src={img}
+          alt="blog"
+          className="absolute inset-0 h-full w-full object-cover object-center"
         />
         <div className="absolute inset-0 bg-black/80" />
         <CardBody className="relative flex flex-col justify-end">
@@ -96,7 +79,7 @@ export function Blog() {
           <div className="flex justify-between items-center mt-5">
             <NavLink
               to={`/all/blogs/${blog_id}`}
-              className="flex flex-row items-center px-7 my-2 font-normal text-center bg-fuchsia-800  py-2 text-white hover:bg-fuchsia-900 active:bg-fuchsia-500"
+              className="flex flex-row items-center px-7 my-2 font-normal text-center bg-fuchsia-800 py-2 text-white hover:bg-fuchsia-900 active:bg-fuchsia-500"
             >
               <span className="me-2">
                 <CgDetailsMore />
@@ -131,7 +114,7 @@ export function Blog() {
         </Typography>
 
         <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-3">
-          {course.map(({ blog_id, img, title, descr, created_at }) => (
+          {blogs.map(({ blog_id, img, title, descr, created_at }) => (
             <ContentCard
               key={blog_id}
               blog_id={blog_id}
