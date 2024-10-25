@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Header from '../Header/header';
 import Footer from '../Footer/footer';
 import bgimg from '../../../images/logo/partners.svg';
-import backurl from '../../../links';
 import { NavLink } from 'react-router-dom';
 import { TiArrowRightThick } from 'react-icons/ti';
 import { FaPhoneVolume } from 'react-icons/fa6';
@@ -11,28 +10,41 @@ import content from '../../../localization/content';
 import useLang from '../../../hooks/useLang';
 
 function AllPartnersLandingPage() {
-  const [course, setCourses] = useState([]);
   const [selectedLand] = useLang();
 
-  useEffect(() => {
-    async function fetchCourses() {
-      try {
-        const response = await fetch(`${backurl}api/get/all/company`);
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        const reversed = data.Company;
-
-        console.log(reversed);
-
-        setCourses(reversed);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    fetchCourses();
-  }, []);
+  // FAANG companies with image URLs
+  const partners = [
+    {
+      company_id: '1',
+      image: 'https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg',
+      name: 'Facebook',
+      idname: 'facebook',
+    },
+    {
+      company_id: '2',
+      image: 'https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg',
+      name: 'Amazon',
+      idname: 'amazon',
+    },
+    {
+      company_id: '3',
+      image: 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg',
+      name: 'Apple',
+      idname: 'apple',
+    },
+    {
+      company_id: '4',
+      image: 'https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg',
+      name: 'Netflix',
+      idname: 'netflix',
+    },
+    {
+      company_id: '5',
+      image: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg',
+      name: 'Google',
+      idname: 'google',
+    },
+  ];
 
   return (
     <div>
@@ -71,24 +83,24 @@ function AllPartnersLandingPage() {
 
         <div className="container mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {course && course.length > 0 ? (
-              course.map((e: any) => (
+            {partners.length > 0 ? (
+              partners.map((partner) => (
                 <div
                   className="flex flex-col md:flex-row mt-10 items-center bg-slate-100 p-4 md:p-10 rounded-xl hover:scale-105 transition-transform easy-2 "
-                  key={e.company_id}
+                  key={partner.company_id}
                 >
                   <div className="flex flex-col md:flex-row items-center">
                     <img
-                      src={`${backurl}upload/${e.image}`}
-                      alt={e.name}
+                      src={partner.image}
+                      alt={partner.name}
                       className="w-20 h-20 md:w-32 md:h-32 object-contain"
                     />
                     <div className="mt-4 md:mt-0 md:ms-10 ">
                       <h2 className="text-center text-black text-xl md:text-3xl font-medium">
-                        {e.name}
+                        {partner.name}
                       </h2>
                       <NavLink
-                        to={`/partners/${e.idname}`}
+                        to={`/partners/${partner.idname}`}
                         className="flex flex-row items-center mt-3 inline-block bg-slate-100 text-black hover:opacity-50"
                       >
                         {content[selectedLand as string].company.more}
